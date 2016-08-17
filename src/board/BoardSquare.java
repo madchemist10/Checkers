@@ -319,7 +319,6 @@ public class BoardSquare extends JPanel{
         AddCheckerToSquare(BoardSquare boardSquare, Checker checker){
             this.boardSquare = boardSquare;
             this.checker = checker;
-
         }
 
         @Override

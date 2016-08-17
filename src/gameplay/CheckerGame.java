@@ -600,7 +600,6 @@ public class CheckerGame implements PropertyChangeListener{
         Checker checker = getCheckerFromSquare(square);
         if(checker != null) {
             checker.setCaptured();
-            System.out.println("Checker captured: "+checker.toString());
             removeCheckerFromSquare(square,checker);
         }
     }
@@ -924,7 +923,6 @@ public class CheckerGame implements PropertyChangeListener{
      * @param checker Checker to be removed from a square.
      */
     private void removeCheckerFromSquare(BoardSquare boardSquare, Checker checker){
-        System.out.println("Removing "+checker.toString()+" from "+boardSquare.toString());
         boardSquare.removeCheckerFromSquare(checker);
     }
 
@@ -938,7 +936,6 @@ public class CheckerGame implements PropertyChangeListener{
      * @param checker Checker to be added to a square.
      */
     private void addCheckerToSquare(BoardSquare boardSquare, Checker checker){
-        System.out.println("Adding "+checker.toString()+" to "+boardSquare.toString());
         boardSquare.addCheckerToSquare(checker);
     }
 

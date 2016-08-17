@@ -89,7 +89,6 @@ public class Checker extends JToggleButton{
      */
     public void setCaptured(){
         this.captured = true;
-        System.out.println("Checker captured: "+this.toString());
     }
 
     /**
@@ -318,9 +317,6 @@ public class Checker extends JToggleButton{
                 this.getCheckerID()+
                 "_"+
                 this.checkerType.toString();
-        if(this.getCurrentSquare() != null) {
-            checkerString+="_"+this.getCurrentSquare().toString();
-        }
         checkerString+="]";
         return checkerString;
     }
