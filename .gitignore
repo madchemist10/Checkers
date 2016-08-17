@@ -1,6 +1,6 @@
 *.class
-.idea
-.out
+.idea/
+out/
 # Package Files #
 *.jar
 *.war
