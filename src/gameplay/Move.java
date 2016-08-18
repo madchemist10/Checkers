@@ -9,7 +9,7 @@ import constants.Constants;
  * Backward_Left
  * Backward_Right
  */
-public enum Move {
+enum Move {
 
     FORWARD_LEFT (Constants.FORWARD_LEFT),
     FORWARD_RIGHT (Constants.FORWARD_RIGHT),
@@ -18,7 +18,7 @@ public enum Move {
     FORWARD_JUMP_LEFT (Constants.FORWARD_JUMP_LEFT),
     FORWARD_JUMP_RIGHT (Constants.FORWARD_JUMP_RIGHT),
     BACKWARD_JUMP_LEFT (Constants.BACKWARD_JUMP_LEFT),
-    BACKWARD_JUMP_RIGHT (Constants.FORWARD_JUMP_RIGHT);
+    BACKWARD_JUMP_RIGHT (Constants.BACKWARD_JUMP_RIGHT);
 
     /**String representation of a color.*/
     private String text;

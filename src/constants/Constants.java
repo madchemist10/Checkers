@@ -22,6 +22,10 @@ public interface Constants {
     int WIDTH_FRAME = (WIDTH_SQUARE * CHECKER_COLUMNS) + FRAME_PADDING;
     int HEIGHT_FRAME = (HEIGHT_SQUARE * CHECKER_ROWS) + (FRAME_PADDING * 5);
 
+    /*Size of GamePlayChoice*/
+    int WIDTH_GAME_PLAY = 100;
+    int HEIGHT_GAME_PLAY = 200;
+
     /*Checker icons*/
     String BLACK_CHECKER_ICON = "black_checker_small.png";
     String WHITE_CHECKER_ICON = "white_checker_small.png";
@@ -79,4 +83,11 @@ public interface Constants {
     String WHITE_PIECES_REMAIN = "White(Remain): ";
     String BLACK_PIECES_REMAIN = "Black(Remain): ";
     String DOUBLE_JUMP = ": Double Jump";
+
+    /*Button labels for game play popup*/
+    String TWO_PLAYER_BUTTON = "Two Player";
+    String RANDOM_PC_BUTTON = "Random PC";
+    String EASY_PC_BUTTON = "Easy PC";
+    String MEDIUM_PC_BUTTON = "Medium PC";
+    String HARD_PC_BUTTON = "Hard PC";
 }

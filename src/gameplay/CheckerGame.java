@@ -7,9 +7,10 @@ import checker.Checker;
 import checker.ClickedState;
 import checker.Color;
 import checker.Piece;
-import computer.IComputerPlayer;
-import computer.RandomComputerPlayer;
+import computer.*;
 import constants.Constants;
+import gui.GamePlay;
+import gui.GamePlayChoice;
 import gui.StatusPanel;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Maintains the map of checkers in play, as well as
@@ -50,12 +52,23 @@ public class CheckerGame implements PropertyChangeListener{
     private final StatusPanel statusPanel;
 
     /**Flag to turn Computer player on and off.*/
-    private static boolean AI = true;
+    private static boolean AI = false;
 
     /**
      * Constructor to create the checker pieces and the game board.
      */
     public CheckerGame(StatusPanel statusPanel){
+        AtomicBoolean gamePlayChoiceComplete = new AtomicBoolean(false);
+        GamePlayChoice gamePlayChoice = new GamePlayChoice(gamePlayChoiceComplete);
+
+        while(!gamePlayChoiceComplete.get()){
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         this.statusPanel = statusPanel;
         this.checkerMap = new HashMap<>();
         generateCheckerPieces();
@@ -63,9 +76,30 @@ public class CheckerGame implements PropertyChangeListener{
         generateCheckerBoard();
         this.checkerBoard.setVisible(true);
         this.statusPanel.updateWinnerLabel(Constants.CURRENT_TURN+CheckerGame.PLAYER_TURN);
+
+        GamePlay gamePlay = gamePlayChoice.gamePlay;
+        switch(gamePlay){
+            case TWO_PLAYER:
+                AI = false;
+                break;
+            case RANDOM:
+                AI = true;
+                this.computerPlayer = new RandomComputerPlayer(randomComputerPlayerColor(),this);
+                break;
+            case EASY:
+                AI = true;
+                this.computerPlayer = new EasyComputerPlayer(randomComputerPlayerColor(),this);
+                break;
+            case MEDIUM:
+                AI = true;
+                this.computerPlayer = new MediumComputerPlayer(randomComputerPlayerColor(),this);
+                break;
+            case HARD:
+                AI = true;
+                this.computerPlayer = new HardComputerPlayer(randomComputerPlayerColor(),this);
+                break;
+        }
         if(AI){
-            /*Generate the computer player if AI is turned on.*/
-            this.computerPlayer = new RandomComputerPlayer(randomComputerPlayerColor(),this);
             allowComputerMove();
         }
     }
