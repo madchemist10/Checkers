@@ -7,7 +7,8 @@ import checker.Checker;
 import checker.ClickedState;
 import checker.Color;
 import checker.Piece;
-import computer.ComputerPlayer;
+import computer.IComputerPlayer;
+import computer.RandomComputerPlayer;
 import constants.Constants;
 import gui.StatusPanel;
 
@@ -42,12 +43,14 @@ public class CheckerGame implements PropertyChangeListener{
     private static Color PLAYER_TURN = Color.WHITE;
 
     /**Reference to the computer player.*/
-    private final ComputerPlayer computerPlayer;
+    private IComputerPlayer computerPlayer;
 
+    /**Status panel to illustrate to the players, whose turn it is
+     * as well as how many of each color pieces are left in play.*/
     private final StatusPanel statusPanel;
 
     /**Flag to turn Computer player on and off.*/
-    private static boolean AI = false;
+    private static boolean AI = true;
 
     /**
      * Constructor to create the checker pieces and the game board.
@@ -60,9 +63,9 @@ public class CheckerGame implements PropertyChangeListener{
         generateCheckerBoard();
         this.checkerBoard.setVisible(true);
         this.statusPanel.updateWinnerLabel(Constants.CURRENT_TURN+CheckerGame.PLAYER_TURN);
-        /*Generate the computer player if AI is turned on.*/
-        this.computerPlayer = new ComputerPlayer(randomComputerPlayerColor(),this);
         if(AI){
+            /*Generate the computer player if AI is turned on.*/
+            this.computerPlayer = new RandomComputerPlayer(randomComputerPlayerColor(),this);
             allowComputerMove();
         }
     }
@@ -171,21 +174,19 @@ public class CheckerGame implements PropertyChangeListener{
      * Execute a computer player move on separate thread.
      */
     private static class ComputerPlayerMove implements Runnable{
-        private final WeakReference<ComputerPlayer> wComputerPlayer;
+        private final WeakReference<IComputerPlayer> wComputerPlayer;
 
-        ComputerPlayerMove(ComputerPlayer computerPlayer){
+        ComputerPlayerMove(IComputerPlayer computerPlayer){
             this.wComputerPlayer = new WeakReference<>(computerPlayer);
         }
 
         @Override
         public void run() {
-            ComputerPlayer computerPlayer = this.wComputerPlayer.get();
+            IComputerPlayer computerPlayer = this.wComputerPlayer.get();
             if(computerPlayer == null){
                 return;
             }
-            System.out.println("\nComputer is thinking.....");
             computerPlayer.makeMove();
-            System.out.println("Computer has made his move...");
         }
     }
 
@@ -533,7 +534,7 @@ public class CheckerGame implements PropertyChangeListener{
      * Assume that AI is turned on.
      */
     private void allowComputerMove(){
-        if(this.computerPlayer != null && CheckerGame.PLAYER_TURN.equals(this.computerPlayer.getComputerColor())){
+        if(this.computerPlayer != null && CheckerGame.PLAYER_TURN.equals(this.computerPlayer.getColor())){
             Thread computerPlayerMove = new Thread(new ComputerPlayerMove(this.computerPlayer));
             computerPlayerMove.start();
         }
