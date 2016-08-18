@@ -14,7 +14,7 @@ import java.util.Map;
  * Abstraction of computer player that maintains the necessary
  * functionality for a computer player.
  */
-class AComputerPlayer implements IComputerPlayer {
+abstract class AComputerPlayer implements IComputerPlayer {
 
     /** Time for the computer player to wait before performing move
      * in milliseconds. 1 second.*/
@@ -39,19 +39,56 @@ class AComputerPlayer implements IComputerPlayer {
     }
 
     /**
+     * Find a valid move and perform that move if a move exists.
+     * @param possibleMoves map of checker piece to (map of specific move type to moves)
+     * @param moveType type of move to find and perform JUMP or NORMAL
+     */
+    protected abstract void findAndPerformMove(Map<Checker, Map<String,ArrayList<BoardSquare>>> possibleMoves,
+                                   String moveType);
+
+    /**
      * {@inheritDoc}
      */
+    @Override
     public Color getColor(){
         return this.color;
     }
 
     /**
      * {@inheritDoc}
-     * Must be overridden by extending classes.
+     * Implementation is complete here, no need to
+     * override in extending class.
      */
     @Override
     public void makeMove() {
-        //do nothing for base class
+        Map<Checker, Map<String,ArrayList<BoardSquare>>> checkerBoardSquareMap = findPossibleMovesForComputer();
+        /*Find how many jump moves there are*/
+        Map<Checker, Map<String,ArrayList<BoardSquare>>> jumpMoves = new HashMap<>(1);
+        Map<Checker, Map<String,ArrayList<BoardSquare>>> normalMoves = new HashMap<>(1);
+        for(Checker checker : checkerBoardSquareMap.keySet()) {
+            Map<String,ArrayList<BoardSquare>> moveTypeToSquareMap = checkerBoardSquareMap.get(checker);
+            for (String moveType : moveTypeToSquareMap.keySet()) {
+                switch(moveType){
+                    case Constants.JUMP:
+                        jumpMoves.put(checker, moveTypeToSquareMap);
+                        break;
+                    case Constants.NORMAL:
+                        normalMoves.put(checker, moveTypeToSquareMap);
+                        break;
+                }
+            }
+        }
+        /*We have at least one valid jump move.*/
+        if(!jumpMoves.isEmpty()){
+            findAndPerformMove(jumpMoves, Constants.JUMP);
+            return; //do not continue to the normal moves.
+        }
+        /*No Jump moves found.*/
+        /*We have at least one valid normal move.*/
+        if(!normalMoves.isEmpty()){
+            findAndPerformMove(normalMoves, Constants.NORMAL);
+            /*Retrieve possible jump moves for a given checker.*/
+        }
     }
 
     /**
@@ -118,6 +155,4 @@ class AComputerPlayer implements IComputerPlayer {
         }
         return checkerBoardSquareMap;
     }
-
-
 }

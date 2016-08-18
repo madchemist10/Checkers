@@ -33,12 +33,10 @@ public class RandomComputerPlayer extends AComputerPlayer{
     }
 
     /**
-     * Find a random valid move and perform that move if a move
-     * exists.
-     * @param possibleMoves map of checker piece to (map of specific move type to moves)
-     * @param moveType type of move to find and perform JUMP or NORMAL
+     * {@inheritDoc}
      */
-    private void findAndPerformRandomMove(Map<Checker, Map<String,ArrayList<BoardSquare>>> possibleMoves,
+    @Override
+    public void findAndPerformMove(Map<Checker, Map<String,ArrayList<BoardSquare>>> possibleMoves,
                                           String moveType){
         int randomChecker = randomGenerator.nextInt(possibleMoves.size());
         /*Retrieve possible jump moves for a given checker.*/
@@ -79,42 +77,5 @@ public class RandomComputerPlayer extends AComputerPlayer{
         /*Move the checker after setting state to clicked.*/
         checkerToMove.setClickedState(ClickedState.CLICKED);
         this.checkerGame.moveSelectedChecker(boardSquareToMoveTo);
-    }
-
-    /**
-     * {@inheritDoc}
-     * Create an appropriate random move and
-     * perform this move.
-     */
-    @Override
-    public void makeMove() {
-        Map<Checker, Map<String,ArrayList<BoardSquare>>> checkerBoardSquareMap = findPossibleMovesForComputer();
-        /*Find how many jump moves there are*/
-        Map<Checker, Map<String,ArrayList<BoardSquare>>> jumpMoves = new HashMap<>(1);
-        Map<Checker, Map<String,ArrayList<BoardSquare>>> normalMoves = new HashMap<>(1);
-        for(Checker checker : checkerBoardSquareMap.keySet()) {
-            Map<String,ArrayList<BoardSquare>> moveTypeToSquareMap = checkerBoardSquareMap.get(checker);
-            for (String moveType : moveTypeToSquareMap.keySet()) {
-                switch(moveType){
-                    case Constants.JUMP:
-                        jumpMoves.put(checker, moveTypeToSquareMap);
-                        break;
-                    case Constants.NORMAL:
-                        normalMoves.put(checker, moveTypeToSquareMap);
-                        break;
-                }
-            }
-        }
-        /*We have at least one valid jump move.*/
-        if(!jumpMoves.isEmpty()){
-            findAndPerformRandomMove(jumpMoves, Constants.JUMP);
-            return; //do not continue to the normal moves.
-        }
-        /*No Jump moves found.*/
-        /*We have at least one valid normal move.*/
-        if(!normalMoves.isEmpty()){
-            findAndPerformRandomMove(normalMoves, Constants.NORMAL);
-            /*Retrieve possible jump moves for a given checker.*/
-        }
     }
 }
